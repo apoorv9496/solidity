@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>DAPP</title>
+        <meta charset="UTF-8">
+
+        <script src="./node_modules/web3/dist/web3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    </head>
+    <body>
+        THIS IS MY FIRST DAPP!!!
+		</br>
+		SETUP AN ACCOUNT WITH US
+		<input id="name" type="text" placeholder="enter your name to setup an account"/>
+		<button id="button_setup" type="button">setup</button>
+
+		</br>
+		GET ACCOUNT INFO
+		<button id="button_get" type="button">get</button>
+
+		</br>
+		<input id="acc_address" type="text" placeholder="enter address to mint value to"/>
+        <input id="amount" type="number" placeholder="enter amount to mint"/>
+		<button id="button_mint" type="button">Mint</button>
+
+		</br>
+		<div id="div"></div>
+
+        <script>
+        var web3 = new Web3();
+        web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+            if(typeof Web3 !== 'undefined'){
+                console.log("undefined");
+            }
+            else{
+                web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+            }
+
+            web3.eth.defaultAccount = web3.eth.accounts[0];
+
+            var contract = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"name": "setAccount",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "user",
+		"outputs": [
+			{
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"name": "ubalance",
+				"type": "uint256"
+			},
+			{
+				"name": "poe",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAccount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "balance_of",
+				"type": "address"
+			}
+		],
+		"name": "balance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}
+]);
+
+        var contract_at = contract.at('0xca606346ab9a7426604325689e95c156442622a4');
+        console.log(contract_at);
+
+		$('#button_setup').click(function() {
+			contract_at.setAccount($('#name').val());
+        })
+
+        $('#button_get').click(function() {
+        	contract_at.getAccount(function(error, result){
+        		if(!error){
+					$("#div").html(result);
+        		}
+        	});
+        })
+
+        $('#button_mint').click(function() {
+        	contract_at.mint($('#acc_address').val(), $('#amount').val(), function(error, result){
+        		if(!error){
+        			alert("result is" + result);
+        		}
+        	});
+        })
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
